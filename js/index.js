@@ -38,8 +38,8 @@ const init = () => {
 
     function submitUserSearchTerm(){
         let searchTerm = document.querySelector('#search').value;
-        let userSearchQueryUrl = `https://api.github.com/search/users?q=${searchTerm} in:name`; // add ' in:name' after the search term 
-        fetch(userSearchQueryUrl, configGithubApiGet) // add github custom header "Accept: application/vnd.github.v3+json"
+        let userSearchQueryUrl = `https://api.github.com/search/users?q=${searchTerm} in:name`;
+        fetch(userSearchQueryUrl, configGithubApiGet)
         .then(res => res.json())
             .then(object => {
                 for (const element of object.items) {
@@ -94,7 +94,21 @@ const init = () => {
 
     function submitReposSearchTerm(){
         console.log('im in submitrepossearchterm');
-
+        let searchTerm = document.querySelector('#search').value;
+        let reposSearchQueryUrl = `https://api.github.com/search/repositories?q=${searchTerm} in:name,description`;
+        fetch(reposSearchQueryUrl, configGithubApiGet)
+        .then(res => res.json())
+            .then(object => {
+                for (const element of object.items) {
+                    console.log(element);
+                    let li = document.createElement('li');
+                    let a = document.createElement('a');
+                    a.href = element.html_url;
+                    a.textContent = element.full_name;
+                    li.append(a);
+                    reposList.append(li);
+                }
+            })
         searchForm.reset();
     };
 
