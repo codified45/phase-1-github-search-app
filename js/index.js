@@ -5,6 +5,8 @@ const init = () => {
 
     let searchForm = document.querySelector('#github-form');
     let isSearchingUsers = true;
+    let userList = document.querySelector('#user-list');
+    let reposList = document.querySelector('#repos-list');
 
     const configGithubApiGet = {
         method: "GET",
@@ -28,16 +30,15 @@ const init = () => {
     // choose which function to call, submitUserSearchTerm or submitReposSearchTerm
     function submitSearchTerm(e){
         e.preventDefault();
+        userList.replaceChildren();
+        reposList.replaceChildren();
         if (searchTextBox.placeholder === "search users"){submitUserSearchTerm();}
         else {submitReposSearchTerm();};
     };
 
     function submitUserSearchTerm(){
-        // e.preventDefault();
         let searchTerm = document.querySelector('#search').value;
-        let userList = document.querySelector('#user-list');
-        userList.replaceChildren();
-        let userSearchQueryUrl = `https://api.github.com/search/users?q=${searchTerm}`; // add ' in:name' after the search term 
+        let userSearchQueryUrl = `https://api.github.com/search/users?q=${searchTerm} in:name`; // add ' in:name' after the search term 
         fetch(userSearchQueryUrl, configGithubApiGet) // add github custom header "Accept: application/vnd.github.v3+json"
         .then(res => res.json())
             .then(object => {
@@ -67,7 +68,7 @@ const init = () => {
                     userList.appendChild(li);
                 }
             });
-    searchForm.reset();
+        searchForm.reset();
     };
 
     function getUserRepos(e){
@@ -93,8 +94,8 @@ const init = () => {
 
     function submitReposSearchTerm(){
         console.log('im in submitrepossearchterm');
-        let repoList = document.querySelector('#repos-list');
 
+        searchForm.reset();
     };
 
 };
